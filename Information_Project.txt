@@ -1,0 +1,46 @@
+There will be 3 user role: Admin, Editor, Viewer
+
+Feature	                Admin	    Editor	    Viewer
+Register/Login	         Yes	    Yes         Yes
+View Documents           Yes        Yes         Yes
+Upload/Edit/Delete Docs	 NO         Yes         NO
+Manage Users/Roles	     Yes        NO          NO
+
+There are two entities/tables, (Database: PostgreSql)
+DB name:user_docs
+
+table name:user
+    id(Integer) Primary key,
+    email,
+    password (encrypted),
+    role (admin | editor | viewer),
+    createdAt,
+    updatedAt
+
+
+table name: document
+    id(Integer) Primary Key,
+    title,
+    filePath,
+    createdAt,
+    uploadedById (uses id column of user table as referece)
+
+in authentication Module,
+/register, /login
+
+in user Module,
+can update user role (only if he is a admin)
+findAll users (only if he is a admin)
+delete a user (only if he is a admin)
+view profile(for any ROLE)
+
+document
+create doc (only for editor)
+get all docs (all document)
+update doc (only for editor)
+delete doc (only for editor)
+
+Note: JWT Secret keys are not hidden (not added to .env) for your reference
+
+
+
