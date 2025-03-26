@@ -8,22 +8,27 @@ import { DocumentsModule } from './documents/documents.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/user.entity';
 import { Document } from './documents/document.entity';
-
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: '1234',
-      database: 'user_docs',
-      entities: [User, Document],
-      synchronize: true,
+    // Load environment variables
+    ConfigModule.forRoot({ isGlobal: true }),
+
+    // TypeORM setup using env variable
+    TypeOrmModule.forRootAsync({
+      useFactory: () => ({
+        type: 'postgres',
+        url: process.env.DATABASE_URL,
+        entities: [User, Document],
+        synchronize: true, // Set to false in production
+      }),
     }),
 
-    AuthModule, UsersModule, DocumentsModule],
+    AuthModule,
+    UsersModule,
+    DocumentsModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
